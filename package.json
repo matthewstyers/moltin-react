@@ -1,11 +1,10 @@
 {
-  "name": "moltin",
-  "description": "SDK for the Moltin eCommerce API",
-  "version": "2.0.0",
-  "homepage": "https://github.com/moltin/js-sdk",
+  "name": "moltin-react",
+  "description": "ReactJS SDK for the Moltin eCommerce API",
+  "version": "0.0.1",
+  "homepage": "https://github.com/matthewstyers/moltin-react",
   "author": {
-    "name": "Moltin Team",
-    "url": "https://moltin.com/"
+    "name": "Matthew Styers"
   },
   "scripts": {
     "roll:cjs": "rollup -c rollup/cjs.config.js",
@@ -19,17 +18,15 @@
   "browser": "dist/moltin.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/moltin/js-sdk.git"
+    "url": "git://github.com/matthewstyers/moltin-react.git"
   },
   "bugs": {
-    "url": "https://github.com/moltin/js-sdk/issues"
+    "url": "https://github.com/matthewstyers/moltin-react/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/moltin/js-sdk/blob/master/LICENSE"
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/matthewstyers/moltin-react/blob/master/LICENSE"
+  }],
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
