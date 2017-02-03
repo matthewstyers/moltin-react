@@ -23,7 +23,7 @@ class RequestFactory {
     };
 
     if (config.clientSecret) {
-      body['client_secret'] = config.clientSecret;
+      body.client_secret = config.clientSecret;
     }
 
     const promise = new Promise((resolve, reject) => {
@@ -37,9 +37,9 @@ class RequestFactory {
       .then((response) => {
         if (response.status === 200) {
           const data = response.json();
-
-          resolve(data);
+          return resolve(data);
         }
+        return resolve(response);
       })
       .then(null, error => reject(error));
     });
@@ -53,11 +53,13 @@ class RequestFactory {
   }
 
   send(uri, method, body) {
+    let pushData = body;
     const config = this.config;
     const storage = this.storage;
 
     const promise = new Promise((resolve, reject) => {
-      const req = function() {
+      const tokenIsExpired = Date.now().toString() >= storage.get('mexpires');
+      const req = function buildRequest() {
         const headers = {
           'Authorization': `Bearer: ${storage.get('mtoken')}`,
           'Content-Type': setHeaderContentType(uri, method)
@@ -68,27 +70,27 @@ class RequestFactory {
         }
 
         if ( method === 'POST' || method === 'PUT' ) {
-          body = `{"data":${JSON.stringify(body)}}`;
+          pushData = `{"data":${JSON.stringify(body)}}`;
         }
 
         fetch(`${config.protocol}://${config.host}/${config.version}/${uri}`, {
-          method: method.toUpperCase(),
-          headers: headers,
-          body: body
+          body: pushData,
+          headers,
+          method: method.toUpperCase()
         })
         .then((response) => {
-          resolve(response.json());
+          return resolve(response.json());
         })
         .catch(error => reject(error));
       };
 
-      if (!storage.get('mtoken') || Date.now().toString() >= storage.get('mexpires')) {
+      if (!storage.get('mtoken') || tokenIsExpired) {
         return this.authenticate()
           .then(req)
           .catch(error => reject(error));
-      } else {
-        req();
       }
+
+      return req();
     });
 
     return promise;
