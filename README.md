@@ -37,7 +37,7 @@ This package is generally functional but does not currently have full code cover
 
 ## Installation
 ```sh
-npm install --save moltin
+npm install --save moltin-react
 ```
 
 
