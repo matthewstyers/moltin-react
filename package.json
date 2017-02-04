@@ -15,6 +15,7 @@
   "main": "src/moltin.js",
   "jsnext:main": "src/moltin.js",
   "module": "src/moltin.js",
+  "cjs:main": "dist/moltin.cjs.js",
   "browser": "dist/moltin.js",
   "repository": {
     "type": "git",
