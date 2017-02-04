@@ -23,7 +23,7 @@ export default {
     buble(),
     uglify()
   ],
-  dest: pkg['main'],
+  dest: pkg['cjs:main'],
   format: 'cjs',
   sourceMap: true
 };

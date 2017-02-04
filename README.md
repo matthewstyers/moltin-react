@@ -1,51 +1,120 @@
-# Moltin JavaScript SDK
+# Moltin React.JS SDK
+> The Moltin React SDK is a simple to use interface for the Moltin eCommerce API to help you get off the ground quickly and efficiently within client and server applications. `moltin-react` is a React-friendly derivation of Moltin's [js-sdk](https://github.com/moltin/js-sdk/tree/master) package that makes full use of React's feature set.
 
-> The Moltin Javascript SDK is a simple to use interface for the Moltin eCommerce API to help you get off the ground quickly and efficiently within client and server applications.
+📚 [API v1 docs](https://docs.moltin.com/) &mdash; 📚 [API v2 (pre-release) docs](https://moltin.api-docs.io/v2) &mdash; 📚 [moltin.com](https://moltin.com)
 
-📚 [Wiki](https://github.com/moltin/js-sdk/wiki) &mdash; 📚 [API docs](https://moltin.api-docs.io/v2) &mdash; 📚 [moltin.com](https://moltin.com)
+## Pre-Release Notice
+This package is generally functional but does not currently have full code coverage. Endpoints currently available are:
+
+#### API v1/v2
+- [x] Brands
+- [x] Cart
+- [x] Categories
+- [x] Collections
+- [x] Currencies
+- [x] Gateways
+- [x] Orders
+- [x] Products
+
+#### API v1
+- [ ] Settings
+- [ ] Modifiers
+- [ ] Checkout
+- [ ] Customers
+- [ ] Addresses
+- [ ] Taxes
+- [ ] Shipping
+- [ ] Promotions
+- [ ] Flows
+- [ ] Entries
+- [ ] Fields
+- [ ] Email Templates
+- [ ] Webhooks
+- [ ] Images
+
+#### API v2
+- [x] Files
 
 ## Installation
-
-```
+```sh
 npm install --save moltin
 ```
 
-#### JavaScript
-
-```html
-<script src="node_modules/moltin/dist/moltin.js"></script>
-```
-
-This will expose a `moltin` object in the global namespace.
-
-#### Node.js
-
-```js
-const moltin = require('moltin');
-```
 
 ## Usage
-
-To get started, create a new instance of the Moltin class with your store `public_id`.
-
-> **Note:** This requires a [Moltin](http://moltin.com) account.
-
+### Option A: MoltinClient
 ```js
-const Moltin = moltin.gateway({
-  publicId: 'XXX'
+import { MoltinClient } from 'moltin-react';
+
+const Moltin = MoltinClient({
+  clientId: 'XXX'
 });
-```
 
-You can now authenticate with the Moltin service 🎉
-
-```js
+// Authenticate the client
 Moltin.Authenticate().then((response) => {
   console.log('authenticated', response);
 });
+
+```
+### Option B: generic constructor
+`moltin-react` exports a named object with the above `MoltinClient` instantiator, as well as an uninstantiated `Moltin` class, so the client can also be instantiated as a constructor:
+
+```js
+
+import moltin from 'moltin-react'; // NOTE: unnamed import
+
+const Moltin = new moltin({
+  clientId: 'XXX'
+});
+
+// same as option A from here on out
+
+Moltin.Authenticate().then((response) => {
+  console.log('authenticated', response);
+});
+
+```
+> **Note:** This requires a [Moltin](http://moltin.com) account.
+
+Once created, `Moltin` in the above example conforms to the standard Moltin JS documentation. Check out the [Moltin wiki](https://github.com/moltin/js-sdk/wiki) to learn more about authenticating and the available endpoints.
+
+## Configuration
+On creation, either of the above options takes an identical configuration object, which requires _only_ `clientId` (see [Authentication](https://docs.moltin.com/authenticate)) but which can accept any of the following:
+
+```js
+FORMAT: /* <key> // [<default value>], <comment> */
+{
+
+  clientId, // required
+  clientSecret, // API Secret. Don't utilize unless you're rendering on server.
+  currency,
+  debug, // [false]
+  language, // [false]
+  version // ['v1'], API version; also accepts 'v2', which, again, is currently unavailable.
+}
 ```
 
-Check out the [wiki](https://github.com/moltin/js-sdk/wiki) to learn more about authenticating and the available endpoints.
+Additionally, if you're using **webpack**, you'll need to add the following to `webpack.config.js`:
 
+```js
+node: {
+  fs: 'empty'
+}
+```
+
+This is a temporary patch and will eventually be replaced with a more react-friendly alternative.
+
+## Troubleshooting
+`moltin-react` assumes an ES6-friendly environment and, by default, imports those modules for consolidation into a larger bundle. A react-friendly pre-crunched version is available at `'moltin-react/dist/moltin.cjs'`
+
+## Roadmap
+As previously stated, `moltin-react` is pre-release but still usable. Here's what's coming down the pike:
+
+- [ ] full API v1 support
+- [ ] flux/redux integration
+- [ ] roll-your-own storage manager
+- [ ] separation of `localStorage` into modular storage engine
+- [ ] higher-order components
 
 ## Development
 

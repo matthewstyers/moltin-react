@@ -1,14 +1,25 @@
 class Config {
   constructor(options) {
-    this.clientId = options.publicId;
-    this.clientSecret = options.secretKey;
-    this.host = 'api.moltin.com';
+    const {
+      clientId,
+      clientSecret,
+      currency,
+      debug = false,
+      language = false,
+      protocol = 'https',
+      version = 'v1'
+    } = options;
+    const host = version === 'v1' ? 'api.molt.in' : 'api.moltin.com';
+
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+    this.host = host;
     this.port = '443';
-    this.protocol = 'https';
-    this.version = 'v2';
-    this.debug = false;
-    this.currency = options.currency;
-    this.language = false;
+    this.protocol = protocol;
+    this.version = version;
+    this.debug = debug;
+    this.currency = currency;
+    this.language = language;
     this.timeout = 60000;
     this.auth = {
       expires: 3600,

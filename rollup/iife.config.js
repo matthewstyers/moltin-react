@@ -20,7 +20,7 @@ export default {
     uglify()
   ],
   context: 'window',
-  dest: pkg['browser'],
+  dest: pkg.browser,
   format: 'iife',
   sourceMap: true,
   moduleName: 'moltin',
