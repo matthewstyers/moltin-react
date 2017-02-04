@@ -12,7 +12,7 @@
     "build": "npm run roll:cjs && npm run roll:iife",
     "test": "npm run build && mocha test/unit/* || true"
   },
-  "main": "dist/moltin.cjs.js",
+  "main": "src/moltin.js",
   "jsnext:main": "src/moltin.js",
   "module": "src/moltin.js",
   "browser": "dist/moltin.js",

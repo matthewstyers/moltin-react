@@ -14,7 +14,7 @@ import OrdersEndpoint from './endpoints/orders';
 import GatewaysEndpoint from './endpoints/gateways';
 import FilesEndpoint from './endpoints/files';
 
-export class Moltin {
+class Moltin {
   constructor(config) {
     this.config = config;
     this.request = new RequestFactory(config);
@@ -38,4 +38,6 @@ export class Moltin {
 }
 
 // Export a function to instantiate the Moltin class
-export const client = (config) => new Moltin(new Config(config));
+const client = (config) => new Moltin(new Config(config));
+
+export const moltin = { client, Moltin };
