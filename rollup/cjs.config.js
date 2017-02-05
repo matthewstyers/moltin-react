@@ -13,7 +13,6 @@ export default {
     resolve({
       jsnext: true,
       main: true,
-      browser: true,
       skip: [
         'fetch-everywhere',
         'es6-promise'
