@@ -11,9 +11,9 @@
     "build": "npm run roll:cjs",
     "test": "npm run build && mocha test/unit/* || true"
   },
-  "main": "src/moltin.js",
+  "main": "dist/moltin.cjs.js",
   "jsnext:main": "src/moltin.js",
-  "module": "src/moltin.js",
+  "module": "dist/moltin.cjs.js",
   "cjs:main": "dist/moltin.cjs.js",
   "repository": {
     "type": "git",
