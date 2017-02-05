@@ -1,7 +1,7 @@
 {
   "name": "moltin-react",
   "description": "ReactJS SDK for the Moltin eCommerce API",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/matthewstyers/moltin-react",
   "author": {
     "name": "Matthew Styers"
@@ -22,10 +22,12 @@
   "bugs": {
     "url": "https://github.com/matthewstyers/moltin-react/issues"
   },
-  "licenses": [{
-    "type": "MIT",
-    "url": "https://github.com/matthewstyers/moltin-react/blob/master/LICENSE"
-  }],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/matthewstyers/moltin-react/blob/master/LICENSE"
+    }
+  ],
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
