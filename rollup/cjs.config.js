@@ -13,7 +13,6 @@ export default {
     resolve({
       jsnext: true,
       main: true,
-      browser: true,
       skip: [
         'fetch-everywhere',
         'es6-promise'
@@ -24,6 +23,7 @@ export default {
     uglify()
   ],
   dest: pkg['cjs:main'],
+  exports: 'named',
   format: 'cjs',
   sourceMap: true
 };

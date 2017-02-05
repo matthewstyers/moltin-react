@@ -17,9 +17,8 @@ This package is generally functional but does not currently have full code cover
 - [x] Products
 
 #### API v1
-- [ ] Settings
-- [ ] Modifiers
-- [ ] Checkout
+- [x] Settings
+- [x] Modifiers - available via `Moltin.Products`
 - [ ] Customers
 - [ ] Addresses
 - [ ] Taxes
@@ -30,7 +29,7 @@ This package is generally functional but does not currently have full code cover
 - [ ] Fields
 - [ ] Email Templates
 - [ ] Webhooks
-- [ ] Images
+- [x] Images
 
 #### API v2
 - [x] Files

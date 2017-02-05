@@ -1,22 +1,20 @@
 {
   "name": "moltin-react",
   "description": "ReactJS SDK for the Moltin eCommerce API",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "homepage": "https://github.com/matthewstyers/moltin-react",
   "author": {
     "name": "Matthew Styers"
   },
   "scripts": {
     "roll:cjs": "rollup -c rollup/cjs.config.js",
-    "roll:iife": "rollup -c rollup/iife.config.js",
-    "build": "npm run roll:cjs && npm run roll:iife",
+    "build": "npm run roll:cjs",
     "test": "npm run build && mocha test/unit/* || true"
   },
   "main": "src/moltin.js",
   "jsnext:main": "src/moltin.js",
   "module": "src/moltin.js",
   "cjs:main": "dist/moltin.cjs.js",
-  "browser": "dist/moltin.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/matthewstyers/moltin-react.git"
