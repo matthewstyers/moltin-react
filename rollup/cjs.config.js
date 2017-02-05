@@ -24,6 +24,7 @@ export default {
     uglify()
   ],
   dest: pkg['cjs:main'],
+  exports: 'named',
   format: 'cjs',
   sourceMap: true
 };

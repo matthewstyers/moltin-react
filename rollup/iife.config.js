@@ -21,6 +21,7 @@ export default {
   ],
   context: 'window',
   dest: pkg.browser,
+  exports: 'named',
   format: 'iife',
   sourceMap: true,
   moduleName: 'moltin',
