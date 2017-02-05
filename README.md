@@ -93,7 +93,9 @@ FORMAT: /* <key> // [<default value>], <comment> */
 }
 ```
 
-Additionally, if you're using **webpack**, you'll need to add the following to `webpack.config.js`:
+
+## Troubleshooting
+If you're using **webpack**, you'll need to add the following to `webpack.config.js` or webpack configuration equivalent:
 
 ```js
 node: {
@@ -101,10 +103,7 @@ node: {
 }
 ```
 
-This is a temporary patch and will eventually be replaced with a more react-friendly alternative.
-
-## Troubleshooting
-`moltin-react` assumes an ES6-friendly environment and, by default, imports those modules for consolidation into a larger bundle. A react-friendly pre-crunched version is available at `'moltin-react/dist/moltin.cjs'`
+This is a temporary patch and will eventually be replaced with a more react-friendly alternative (see Roadmap).
 
 ## Roadmap
 As previously stated, `moltin-react` is pre-release but still usable. Here's what's coming down the pike:
