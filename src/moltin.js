@@ -1,6 +1,3 @@
-import 'fetch-everywhere';
-import 'es6-promise';
-
 import Config from './config';
 import RequestFactory from './factories/request';
 import StorageFactory from './factories/storage';
