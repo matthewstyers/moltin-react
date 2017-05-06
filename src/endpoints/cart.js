@@ -11,7 +11,7 @@ class CartEndpoint extends BaseExtend {
   }
 
   Contents() {
-    return this.request.send(`${this.endpoint}/${this.cartId}/items`, 'GET');
+    return this.request.send(`${this.endpoint}/${this.cartId}/`, 'GET');
   }
 
   Insert(id, quantity) {
@@ -20,7 +20,7 @@ class CartEndpoint extends BaseExtend {
       quantity: parseInt(quantity) || 1
     };
 
-    return this.request.send(`${this.endpoint}/${this.cartId}/items`, 'POST', productObject);
+    return this.request.send(`${this.endpoint}/${this.cartId}/`, 'POST', productObject);
   }
 
   Remove(id) {
