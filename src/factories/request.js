@@ -1,6 +1,6 @@
 import StorageFactory from './storage';
 
-import { setHeaderContentType } from '../utils/helpers';
+import { setHeaderContentType, buildRequestBody, parseJSON } from '../utils/helpers';
 
 class RequestFactory {
   constructor(config) {
@@ -13,17 +13,17 @@ class RequestFactory {
     const config = this.config;
     const storage = this.storage;
 
-    if (config.clientId.length <= 0) {
-      throw new Error('You must have a client id set');
+    if (!config.client_id) {
+      throw new Error('You must have a client_id set');
     }
 
     const body = {
-      grant_type: config.clientSecret ? 'client_credentials' : 'implicit',
-      client_id: config.clientId,
+      grant_type: config.client_secret ? 'client_credentials' : 'implicit',
+      client_id: config.client_id,
     };
 
-    if (config.clientSecret) {
-      body.client_secret = config.clientSecret;
+    if (config.client_secret) {
+      body.client_secret = config.client_secret;
     }
 
     const promise = new Promise((resolve, reject) => {
@@ -32,59 +32,61 @@ class RequestFactory {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: Object.keys(body).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(body[k])}`).join('&')
+        body: Object.keys(body).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(body[k])}`).join('&'),
       })
+      .then(parseJSON)
       .then((response) => {
-        if (response.status === 200) {
-          const data = response.json();
-          return resolve(data);
+        if (response.ok) {
+          resolve(response.json);
         }
-        return resolve(response);
+
+        reject(response.json);
       })
-      .then(null, error => reject(error));
+      .catch(() => reject('Fetch error - check your network'));
     });
 
-    promise.then((data) => {
-      storage.set('mtoken', data.access_token);
-      storage.set('mexpires', data.expires);
+    promise.then((response) => {
+      storage.set('mtoken', response.access_token);
+      storage.set('mexpires', response.expires);
     });
 
     return promise;
   }
 
   send(uri, method, body) {
-    let pushData = body;
     const config = this.config;
     const storage = this.storage;
 
     const promise = new Promise((resolve, reject) => {
-      const tokenIsExpired = Date.now().toString() >= storage.get('mexpires');
-      const req = function buildRequest() {
+      const req = () => {
         const headers = {
-          'Authorization': `Bearer: ${storage.get('mtoken')}`,
-          'Content-Type': setHeaderContentType(uri, method)
+          Authorization: `Bearer: ${storage.get('mtoken')}`,
+          'Content-Type': setHeaderContentType(uri, method),
+          'X-MOLTIN-SDK-LANGUAGE': config.sdk.language,
+          'X-MOLTIN-SDK-VERSION': config.sdk.version,
         };
 
         if (config.currency) {
           headers['X-MOLTIN-CURRENCY'] = config.currency;
         }
 
-        if ( method === 'POST' || method === 'PUT' ) {
-          pushData = `{"data":${JSON.stringify(body)}}`;
-        }
-
         fetch(`${config.protocol}://${config.host}/${config.version}/${uri}`, {
-          body: pushData,
+          method: method.toUpperCase(),
           headers,
-          method: method.toUpperCase()
+          body: buildRequestBody(method, body),
         })
+        .then(parseJSON)
         .then((response) => {
-          return resolve(response.json());
+          if (response.ok) {
+            resolve(response.json);
+          }
+
+          reject(response.json);
         })
-        .catch(error => reject(error));
+        .catch(() => reject('Fetch error - check your network'));
       };
 
-      if (!storage.get('mtoken') || tokenIsExpired) {
+      if (!storage.get('mtoken') || Date.now().toString() >= storage.get('mexpires')) {
         return this.authenticate()
           .then(req)
           .catch(error => reject(error));

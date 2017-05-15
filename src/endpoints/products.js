@@ -1,6 +1,6 @@
+import { pluralize } from 'inflected';
 import CatalogueExtend from '../extends/catalogue';
-
-import { parseRelationshipType } from '../utils/helpers';
+import { buildRelationshipData } from '../utils/helpers';
 
 class ProductsEndpoint extends CatalogueExtend {
   constructor(endpoint) {
@@ -9,16 +9,28 @@ class ProductsEndpoint extends CatalogueExtend {
     this.endpoint = 'products';
   }
 
-  AddRelationship(id, body) {
-    const parsedType = parseRelationshipType(body.type);
+  Filter(filter) {
+    this.filter = filter;
 
-    return this.request.send(`${this.endpoint}/${id}/relationships/${parsedType}`, 'POST', [body]);
+    return this;
   }
 
-  DeleteRelationship(id, body) {
-    const parsedType = parseRelationshipType(body.type);
+  CreateRelationships(id, type, resources) {
+    const body = buildRelationshipData(type, resources);
 
-    return this.request.send(`${this.endpoint}/${id}/relationships/${parsedType}`, 'DELETE', [body]);
+    return this.request.send(`${this.endpoint}/${id}/relationships/${pluralize(type)}`, 'POST', body);
+  }
+
+  DeleteRelationships(id, type, resources) {
+    const body = buildRelationshipData(type, resources);
+
+    return this.request.send(`${this.endpoint}/${id}/relationships/${pluralize(type)}`, 'DELETE', body);
+  }
+
+  UpdateRelationships(id, type, resources = null) {
+    const body = buildRelationshipData(type, resources);
+
+    return this.request.send(`${this.endpoint}/${id}/relationships/${pluralize(type)}`, 'PUT', body);
   }
 }
 
