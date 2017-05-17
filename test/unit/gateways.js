@@ -1,28 +1,36 @@
-/* jshint node: true */
+/* eslint no-undef: "off",
+          import/no-extraneous-dependencies: "off"
+*/
 
 const assert = require('chai').assert;
 const nock = require('nock');
 const moltin = require('../../dist/moltin.cjs.js');
 const gateways = require('../factories').gatewaysArray;
-const store = moltin.gateway({
-  publicId: 'XXX'
-});
 
 const apiUrl = 'https://api.moltin.com/v2';
 
 describe('Moltin gateways', () => {
+  // Instantiate a Moltin client before each test
+  beforeEach(() => {
+    Moltin = moltin.gateway({
+      client_id: 'XXX',
+    });
+  });
+
   it('should return an array of gateways', () => {
     // Intercept the API request
     nock(apiUrl, {
       reqHeaders: {
-        'Content-Type': 'application/json'
-      }
+        Authorization: 'a550d8cbd4a4627013452359ab69694cd446615a',
+        'Content-Type': 'application/json',
+      },
     })
     .get('/gateways')
     .reply(200, gateways);
 
-    return store.Gateways.List().then((gateways) => {
-      assert.lengthOf(gateways, 2);
+    return Moltin.Gateways.All()
+    .then((response) => {
+      assert.lengthOf(response, 2);
     });
   });
 
@@ -30,14 +38,16 @@ describe('Moltin gateways', () => {
     // Intercept the API request
     nock(apiUrl, {
       reqHeaders: {
-        'Content-Type': 'application/json'
-      }
+        Authorization: 'a550d8cbd4a4627013452359ab69694cd446615a',
+        'Content-Type': 'application/json',
+      },
     })
     .get('/gateways/braintree')
     .reply(200, gateways[0]);
 
-    return store.Gateways.Get(gateways[0].slug).then((gateway) => {
-      assert.propertyVal(gateway, 'slug', 'braintree');
+    return Moltin.Gateways.Get(gateways[0].slug)
+    .then((response) => {
+      assert.propertyVal(response, 'slug', 'braintree');
     });
   });
 
@@ -45,20 +55,22 @@ describe('Moltin gateways', () => {
     // Intercept the API request
     nock(apiUrl, {
       reqHeaders: {
-        'Content-Type': 'application/json'
-      }
+        Authorization: 'a550d8cbd4a4627013452359ab69694cd446615a',
+        'Content-Type': 'application/json',
+      },
     })
     .put('/gateways/braintree', {
       data: {
-        enabled: true
-      }
+        enabled: true,
+      },
     })
     .reply(200, {
-      enabled: true
+      enabled: true,
     });
 
-    return store.Gateways.Enabled(gateways[0].slug, true).then((gateway) => {
-      assert.propertyVal(gateway, 'enabled', true);
+    return Moltin.Gateways.Enabled(gateways[0].slug, true)
+    .then((response) => {
+      assert.propertyVal(response, 'enabled', true);
     });
   });
 
@@ -66,22 +78,24 @@ describe('Moltin gateways', () => {
     // Intercept the API request
     nock(apiUrl, {
       reqHeaders: {
-        'Content-Type': 'application/json'
-      }
+        Authorization: 'a550d8cbd4a4627013452359ab69694cd446615a',
+        'Content-Type': 'application/json',
+      },
     })
     .put('/gateways/braintree', {
       data: {
-        name: 'Braintree (updated)'
-      }
+        name: 'Braintree (updated)',
+      },
     })
     .reply(200, {
-      name: 'Braintree (updated)'
+      name: 'Braintree (updated)',
     });
 
-    return store.Gateways.Update(gateways[0].slug, {
-      name: 'Braintree (updated)'
-    }).then((gateway) => {
-      assert.propertyVal(gateway, 'name', 'Braintree (updated)');
+    return Moltin.Gateways.Update(gateways[0].slug, {
+      name: 'Braintree (updated)',
+    })
+    .then((response) => {
+      assert.propertyVal(response, 'name', 'Braintree (updated)');
     });
   });
 });

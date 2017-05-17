@@ -1,13 +1,27 @@
 import StorageFactory from '../factories/storage';
 
-export function parseRelationshipType(type) {
-  let parsedType = `${type}s`;
+export function buildRelationshipData(type, ids) {
+  let data = [];
 
-  if (type === 'category') {
-    parsedType = 'categories';
+  if (ids === null || ids.length === 0) {
+    return null;
   }
 
-  return parsedType;
+  if (typeof ids === 'string') {
+    return [{
+      type,
+      id: ids,
+    }];
+  }
+
+  if (Array.isArray(ids)) {
+    data = ids.map(id => ({
+      type,
+      id,
+    }));
+  }
+
+  return data;
 }
 
 export function cartIdentifier(reset = false, id = false) {
@@ -26,6 +40,15 @@ export function cartIdentifier(reset = false, id = false) {
   return id;
 }
 
+export function parseJSON(response) {
+  return new Promise(resolve => response.json()
+    .then(json => resolve({
+      status: response.status,
+      ok: response.ok,
+      json,
+    })));
+}
+
 export function setHeaderContentType(uri, method) {
   let contentType = 'application/json';
 
@@ -36,14 +59,80 @@ export function setHeaderContentType(uri, method) {
   return contentType;
 }
 
-export function mergeBodyObject(body, key, value) {
-  let mergedBody = body;
+function formatFilterString(type, filter) {
+  const filterStringArray = Object.keys(filter).map((key) => {
+    const value = filter[key];
 
-  if (!(key in body)) {
-    mergedBody = Object.assign(body, {
-      key: value
-    });
+    return `${type}(${key},${value})`;
+  });
+
+  return filterStringArray.join(':');
+}
+
+function formatQueryString(key, value) {
+  if (key === 'limit' || key === 'offset') {
+    return `page${(value)}`;
   }
 
-  return mergedBody;
+  if (key === 'filter') {
+    const filterValues = Object.keys(value).map(
+      filter => formatFilterString(filter, value[filter]));
+
+    return `${key}=${filterValues.join(':')}`;
+  }
+
+  return `${key}=${value}`;
+}
+
+function buildQueryParams({ includes, sort, limit, offset, filter }) {
+  const query = {};
+
+  if (includes) {
+    query.include = includes;
+  }
+
+  if (sort) {
+    query.sort = `(${sort})`;
+  }
+
+  if (limit) {
+    query.limit = `[limit]=${limit}`;
+  }
+
+  if (offset) {
+    query.offset = `[offset]=${offset}`;
+  }
+
+  if (filter) {
+    query.filter = filter;
+  }
+
+  return Object.keys(query).map(k => formatQueryString(k, query[k])).join('&');
+}
+
+export function buildURL(endpoint, params) {
+  if (params.includes || params.sort || params.limit || params.offset || params.filter) {
+    const paramsString = buildQueryParams(params);
+
+    return `${endpoint}?${paramsString}`;
+  }
+
+  return endpoint;
+}
+
+
+export function buildRequestBody(method, body) {
+  if (method !== 'GET') {
+    return `{"data":${JSON.stringify(body)}}`;
+  }
+
+  return null;
+}
+
+export function buildCartItemData(product, quantity, type = 'cart_item') {
+  return {
+    id: product,
+    type,
+    quantity: parseInt(quantity, 10),
+  };
 }

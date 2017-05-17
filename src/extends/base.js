@@ -1,4 +1,5 @@
 import RequestFactory from '../factories/request';
+import { buildURL } from '../utils/helpers';
 
 class BaseExtend {
   constructor(config) {
@@ -7,18 +8,42 @@ class BaseExtend {
     this.config = config;
   }
 
-  Get(id, params) {
-    if (this.endpoint === 'carts') {
-      return this.request.send(`${this.endpoint}/${this.cartId}`, 'GET');
-    }
+  All() {
+    this.call = this.request.send(buildURL(this.endpoint, {
+      includes: this.includes,
+      sort: this.sort,
+      limit: this.limit,
+      offset: this.offset,
+      filter: this.filter,
+    }), 'GET');
 
-    if (params) {
-      const includes = params.toString();
+    return this.call;
+  }
 
-      return this.request.send(`${this.endpoint}/${id}?include=${includes}`, 'GET');
-    }
+  Get(id) {
+    this.call = this.request.send(buildURL(`${this.endpoint}/${id}`, {
+      includes: this.includes,
+    }), 'GET');
 
-    return this.request.send(`${this.endpoint}/${id}`, 'GET');
+    return this.call;
+  }
+
+  Limit(value) {
+    this.limit = value;
+
+    return this;
+  }
+
+  Offset(value) {
+    this.offset = value;
+
+    return this;
+  }
+
+  Sort(value) {
+    this.sort = value;
+
+    return this;
   }
 }
 

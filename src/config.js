@@ -1,13 +1,15 @@
+const pkg = require('../package.json');
+
 class Config {
   constructor(options) {
     const {
       clientId,
-      clientSecret,
+      clientSecret = undefined,
       currency,
       debug = false,
       language = false,
       protocol = 'https',
-      version = 'v1'
+      version = 'v2',
     } = options;
     const host = version === 'v1' ? 'api.molt.in' : 'api.moltin.com';
 
@@ -23,9 +25,21 @@ class Config {
     this.timeout = 60000;
     this.auth = {
       expires: 3600,
-      uri: 'oauth/access_token'
+      uri: 'oauth/access_token',
     };
     this.methods = ['GET', 'POST', 'PUT', 'DELETE'];
+    this.sdk = {
+      version: pkg.version,
+      language: 'JS',
+    };
+  }
+
+  // helpers; eliminates conflicts with core moltin services
+  get client_id() {
+    return this.clientId;
+  }
+  get client_secret() {
+    return this.clientSecret;
   }
 }
 

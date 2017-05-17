@@ -1,6 +1,6 @@
 import BaseExtend from '../extends/base';
 
-import { cartIdentifier } from '../utils/helpers';
+import { cartIdentifier, buildCartItemData } from '../utils/helpers';
 
 class CartEndpoint extends BaseExtend {
   constructor(endpoint) {
@@ -10,37 +10,44 @@ class CartEndpoint extends BaseExtend {
     this.cartId = cartIdentifier();
   }
 
-  Contents() {
-    return this.request.send(`${this.endpoint}/${this.cartId}/items`, 'GET');
+  Get(cartId = this.cartId) {
+    return this.request.send(`${this.endpoint}/${cartId}`, 'GET');
   }
 
-  Insert(id, quantity) {
-    const productObject = {
-      id: id,
-      quantity: parseInt(quantity) || 1
-    };
-
-    return this.request.send(`${this.endpoint}/${this.cartId}/items`, 'POST', productObject);
+  Items(cartId = this.cartId) {
+    return this.request.send(`${this.endpoint}/${cartId}/items`, 'GET');
   }
 
-  Remove(id) {
-    return this.request.send(`${this.endpoint}/${this.cartId}/items/${id}`, 'DELETE');
+  AddProduct(productId, quantity = 1, cartId = this.cartId) {
+    const body = buildCartItemData(productId, quantity);
+
+    return this.request.send(`${this.endpoint}/${cartId}/items`, 'POST', body);
   }
 
-  Quantity(id, quantity) {
-    const productObject = {
-      quantity: parseInt(quantity)
-    };
+  AddCustomItem(body, cartId = this.cartId) {
+    const itemObject = Object.assign(body, {
+      type: 'custom_item',
+    });
 
-    return this.request.send(`${this.endpoint}/${this.cartId}/items/${id}`, 'PUT', productObject);
+    return this.request.send(`${this.endpoint}/${cartId}/items`, 'POST', itemObject);
   }
 
-  Complete(body) {
-    return this.request.send(`${this.endpoint}/${this.cartId}/checkout`, 'POST', body);
+  RemoveItem(itemId, cartId = this.cartId) {
+    return this.request.send(`${this.endpoint}/${cartId}/items/${itemId}`, 'DELETE');
   }
 
-  Delete() {
-    return this.request.send(`${this.endpoint}/${this.cartId}`, 'DELETE');
+  UpdateItemQuantity(itemId, quantity, cartId = this.cartId) {
+    const body = buildCartItemData(itemId, quantity);
+
+    return this.request.send(`${this.endpoint}/${cartId}/items/${itemId}`, 'PUT', body);
+  }
+
+  Checkout(body, cartId = this.cartId) {
+    return this.request.send(`${this.endpoint}/${cartId}/checkout`, 'POST', body);
+  }
+
+  Delete(cartId = this.cartId) {
+    return this.request.send(`${this.endpoint}/${cartId}`, 'DELETE');
   }
 }
 

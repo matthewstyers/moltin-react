@@ -1,7 +1,7 @@
 {
   "name": "moltin-react",
   "description": "ReactJS SDK for the Moltin eCommerce API",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/matthewstyers/moltin-react",
   "author": {
     "name": "Matthew Styers"
@@ -11,10 +11,10 @@
     "build": "npm run roll:cjs",
     "test": "npm run build && mocha test/unit/* || true"
   },
-  "main": "dist/moltin.cjs.js",
+  "main": "dist/moltin-react.cjs.js",
   "jsnext:main": "src/moltin.js",
-  "module": "dist/moltin.cjs.js",
-  "cjs:main": "dist/moltin.cjs.js",
+  "module": "dist/moltin-react.cjs.js",
+  "cjs:main": "dist/moltin-react.cjs.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/matthewstyers/moltin-react.git"
@@ -29,7 +29,11 @@
     }
   ],
   "devDependencies": {
+    "@krux/condition-jenkins": "^1.0.1",
     "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.1.3",
+    "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.2",
     "rollup": "^0.36.4",
@@ -39,6 +43,7 @@
     "rollup-plugin-uglify": "^1.0.1"
   },
   "dependencies": {
+    "inflected": "^2.0.1",
     "node-localstorage": "^1.3.0"
   }
 }
