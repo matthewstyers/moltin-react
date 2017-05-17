@@ -33,11 +33,9 @@ export default class Moltin {
       this.Products = new LegacyProductsEndpoint(config);
       this.Settings = new SettingsEndpoint(config);
       this.Images = new FilesEndpoint(config);
-
     } else {
       this.Files = new FilesEndpoint(config);
       this.Products = new ProductsEndpoint(config);
-
     }
   }
 
@@ -48,4 +46,4 @@ export default class Moltin {
 }
 
 // Export a function to instantiate the Moltin class
-export const MoltinClient = (config) => new Moltin(new Config(config));
+export const MoltinClient = config => new Moltin(new Config(config));
