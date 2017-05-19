@@ -1,7 +1,7 @@
 {
   "name": "moltin-react",
   "description": "ReactJS SDK for the Moltin eCommerce API",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/matthewstyers/moltin-react",
   "author": {
     "name": "Matthew Styers"
