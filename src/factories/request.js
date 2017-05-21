@@ -42,7 +42,13 @@ class RequestFactory {
 
         reject(response.json);
       })
-      .catch(() => reject('Fetch error - check your network'));
+      .catch((err) => {
+        if (config.debug) {
+          reject(err);
+        } else {
+          reject('Fetch error - check your network');
+        }
+      });
     });
 
     promise.then((response) => {
@@ -56,7 +62,6 @@ class RequestFactory {
   send(uri, method, body = null) {
     const config = this.config;
     const storage = this.storage;
-
     const promise = new Promise((resolve, reject) => {
       const req = () => {
         const headers = {
@@ -83,7 +88,13 @@ class RequestFactory {
 
           reject(response.json);
         })
-        .catch(() => reject('Fetch error - check your network'));
+        .catch((err) => {
+          if (config.debug) {
+            reject(err);
+          } else {
+            reject('Fetch error - check your network');
+          }
+        });
       };
 
       if (!storage.get('mtoken') || Date.now().toString() >= storage.get('mexpires')) {

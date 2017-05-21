@@ -5,7 +5,7 @@ class Config {
     const {
       clientId,
       clientSecret = undefined,
-      currency,
+      currency = 'USD',
       debug = false,
       language = false,
       protocol = 'https',
